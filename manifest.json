@@ -1,0 +1,14 @@
+// Manifest (manifest.json)
+{
+  "manifest_version": 3,
+  "name": "Text Copy-Paste Tool",
+  "version": "1.0",
+  "description": "A simple tool to copy and paste text from a popup.",
+  "permissions": ["scripting"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon-16.png"
+    }
+  }
+}
