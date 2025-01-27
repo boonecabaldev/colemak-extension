@@ -1,0 +1,28 @@
+{
+  "manifest_version": 2,
+  "name": "Colemaks Extension",
+  "version": "1.0",
+  "description": "An extension to highlight text inputs and switch tabs.",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "clipboardRead",
+    "clipboardWrite"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons8-copy-16.png"
+    }
+  }
+}
