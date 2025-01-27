@@ -1,14 +1,29 @@
-// Manifest (manifest.json)
 {
-  "manifest_version": 3,
-  "name": "Text Copy-Paste Tool",
+  "manifest_version": 2,
+  "name": "Colemak Tab Cycler",
   "version": "1.0",
-  "description": "A simple tool to copy and paste text from a popup.",
-  "permissions": ["scripting"],
-  "action": {
+  "description": "Cycles through browser tabs using a Colemak keyboard layout popup.",
+  
+  "browser_action": {
     "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icon-16.png"
+    "default_title": "Open Colemak Area",
+    "default_icon": "icons8-copy-16.png"
+  },
+
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Alt+H"
+      },
+      "description": "Open the popup with Alt+H"
     }
-  }
+  },
+
+  "permissions": ["tabs", "storage", "clipboardWrite", "clipboardRead"],
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "content_security_policy": "script-src 'self' 'unsafe-inline'; object-src 'self'"
 }
