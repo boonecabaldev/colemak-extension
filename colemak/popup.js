@@ -5,85 +5,49 @@ import { dvorakToColemakConversion } from './dvorakToColemak.js';
 let previouslyFocusedElement = null;
 let clipboardData = "";
 
+// Function to hook a text element
+function HookTextElement(input) {
+  console.log("In HookTextElement function");
+  
+  input.style.border = '2px solid yellow';
+
+  // Add focus event listener
+  input.addEventListener('focus', () => {
+    console.log("Focus event triggered");
+    input.style.border = '4px solid green';
+  });
+
+  // Add blur event listener
+  input.addEventListener('blur', () => {
+    console.log("Blur event triggered");
+    input.style.border = '2px solid yellow';
+  });
+
+  // Add keydown event listener for Dvorak to Colemak conversion
+  input.addEventListener('keydown', (event) => {
+    console.log("Keydown event triggered");
+    dvorakToColemakConversion(event, input.id);
+  });
+}
+
+// Listen for messages from the content script
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "webPageLoaded") {
+    console.log("Received webPageLoaded message in popup");
+    // Your code to handle the event
+  }
+});
+
 // Track the focused element when the popup opens
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOMContentLoaded event triggered");
+
   chrome.runtime.sendMessage({ type: "popupOpened" });
 
   // Focus the textarea when the popup opens
   const textArea = document.getElementById("colemakTextArea");
   if (textArea) {
-    textArea.focus();
-
-    // Add the event listener for keydown (for Dvorak to Colemak conversion)
-    textArea.addEventListener("keydown", (event) => {
-      if (event.shiftKey && event.key === 'Enter') {
-        event.preventDefault();
-        copyAndClearButton.click();
-      } else {
-        dvorakToColemakConversion(event);
-      }
-    });
+    console.log("Text area found:", textArea);
+    // Your existing code to handle the text area
   }
-
-  // Listen for Shift+Enter or the "Save to File" button click
-  const saveToFileButton = document.getElementById("saveToFileButton");
-  const copyButton = document.getElementById('copyButton');
-  const copyAndClearButton = document.getElementById('copyAndClearButton');
-  const message = document.getElementById('message');
-
-  function copyTextToClipboard(text) {
-    document.body.focus();  // Ensure the document is focused
-    navigator.clipboard.writeText(text)
-      .then(() => {
-        console.log("Text copied to clipboard!");
-        message.style.display = 'block';
-        setTimeout(() => {
-          message.style.display = 'none';
-        }, 2000);
-      })
-      .catch(err => {
-        console.error("Error copying text to clipboard: ", err);
-      });
-  }
-
-  function saveTextToFile(text, filename) {
-    const blob = new Blob([text], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
-
-  saveToFileButton.addEventListener("click", () => {
-    const text = textArea.value;
-    saveTextToFile(text, 'colemak_text.txt');
-    textArea.value = "";  // Clear the text area
-  });
-
-  copyButton.addEventListener('click', () => {
-    const text = textArea.value;
-    copyTextToClipboard(text);
-  });
-
-  copyAndClearButton.addEventListener('click', () => {
-    const text = textArea.value;
-    copyTextToClipboard(text);
-    textArea.value = "";  // Clear the text area
-    window.close();  // Close the popup
-
-    // Paste the text into the previously focused element
-    if (previouslyFocusedElement) {
-      previouslyFocusedElement.focus();
-      const start = previouslyFocusedElement.selectionStart;
-      const end = previouslyFocusedElement.selectionEnd;
-      previouslyFocusedElement.setRangeText(text, start, end, "end");
-    }
-  });
-
-  // Track the previously focused element
-  previouslyFocusedElement = document.activeElement;
 });

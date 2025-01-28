@@ -107,8 +107,8 @@ function dvorakToColemakConversion(event) {
 ///*
 
 // Perform the Dvorak to Colemak conversion on keydown
-function dvorakToColemakConversion(event) {
-  const textArea = document.getElementById("colemakTextArea");
+function dvorakToColemakConversion(event, id) {
+  const textArea = document.getElementById(id);
   const start = textArea.selectionStart;
   const end = textArea.selectionEnd;
 
