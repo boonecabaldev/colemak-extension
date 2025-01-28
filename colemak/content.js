@@ -62,6 +62,10 @@ const dvorakToColemak = {
 
 // Perform the Dvorak to Colemak conversion on keydown
 function dvorakToColemakConversion(event) {
+  if (event.metaKey && event.key === '\'') {
+    return;
+  }
+
   const input = event.target;
   const start = input.selectionStart;
   const end = input.selectionEnd;
@@ -98,4 +102,25 @@ textInputs.forEach(input => {
 // Listen for an event (optional)
 document.addEventListener('click', (event) => {
   console.log('Clicked element:', event.target);
+});
+
+// Listen for Command+T to turn off highlighting and Colemak conversion
+document.addEventListener('keydown', (event) => {
+  if (event.metaKey && event.key === '\'') {
+    event.preventDefault();
+    textInputs.forEach(input => {
+      input.style.border = ''; // Reset border style
+
+      // Remove event listeners
+      input.removeEventListener('focus', () => {
+        input.style.border = '4px solid green';
+      });
+
+      input.removeEventListener('blur', () => {
+        input.style.border = '2px solid yellow';
+      });
+
+      input.removeEventListener('keydown', dvorakToColemakConversion);
+    });
+  }
 });

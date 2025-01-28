@@ -2,8 +2,7 @@
 
 ## Current Task
 
-Add colemak keypress eventhandler to textbox
-Refactor function HookTextbox, UnhookTextbox
+* give hotkey that turns highlighting and colemak conversion off
 
 ## Dotfiles
 
