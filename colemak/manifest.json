@@ -24,5 +24,13 @@
     "default_icon": {
       "16": "icons8-copy-16.png"
     }
+  },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Alt+H"
+      },
+      "description": "Open the popup with Alt+H"
+    }
   }
 }

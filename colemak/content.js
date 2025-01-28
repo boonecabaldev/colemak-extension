@@ -1,15 +1,18 @@
 // Get all input elements on the page
-const textInputs = document.querySelectorAll('input[type="text"], textarea');
+const textInputs = document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], input[type="search"], input[type="url"], input[type="tel"], textarea');
 
 // Highlight them with a yellow border
 textInputs.forEach(input => {
   input.style.border = '2px solid yellow';
-});
 
-// Listen for focus event on text inputs
-textInputs.forEach(input => {
+  // Add focus event listener
   input.addEventListener('focus', () => {
-    chrome.runtime.sendMessage({ type: 'textboxFocused' });
+    input.style.border = '4px solid green';
+  });
+
+  // Add blur event listener
+  input.addEventListener('blur', () => {
+    input.style.border = '2px solid yellow';
   });
 });
 

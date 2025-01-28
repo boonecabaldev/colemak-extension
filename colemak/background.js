@@ -32,3 +32,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     chrome.browserAction.openPopup();
   }
 });
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'textboxFocused') {
+    console.log('A textbox has received focus');
+    // Perform any additional actions here
+  }
+});
+
+chrome.commands.onCommand.addListener((command) => {
+  if (command === "open-popup") {
+    chrome.browserAction.openPopup();
+  }
+});
