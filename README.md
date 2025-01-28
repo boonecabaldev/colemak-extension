@@ -1,4 +1,11 @@
-# Hi
+# Colemak
+
+## Current Task
+
+Add colemak keypress eventhandler to textbox
+Refactor function HookTextbox, UnhookTextbox
+
+## Dotfiles
 
 ```sh
 
