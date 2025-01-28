@@ -19,8 +19,7 @@ const dvorakToColemak = {
   h: "n",
   t: "e",
   n: "i",
-  s: "o",
-  "-": "z",
+  ";": "z",
   q: "x",
   j: "c",
   k: "v",
@@ -48,8 +47,7 @@ const dvorakToColemak = {
   H: "N",
   T: "E",
   N: "I",
-  S: "O",
-  _: "Z",
+  ":": "Z",
   Q: "X",
   J: "C",
   K: "V",
@@ -58,7 +56,26 @@ const dvorakToColemak = {
   M: "M",
   //V: ">",
   //Z: "?",
+  s: "o",
+  S: "O",
+  "-": "'",
+  _: '"',
+  "/": "[",
+  "?": "{",
+  "=": "]",
+  "+": "}",
+  "[": "-",
+  "{": "_",
+  "]": "=",
+  "}": "+",
+  w: ",",
+  W: "<",
+  v: ".",
+  V: ">",
+  z: "/",
+  Z: "?"
 };
+
 
 // Perform the Dvorak to Colemak conversion on keydown
 function dvorakToColemakConversion(event) {
