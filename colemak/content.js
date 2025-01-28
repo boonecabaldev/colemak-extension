@@ -81,46 +81,63 @@ function dvorakToColemakConversion(event) {
 // Get all input elements on the page
 const textInputs = document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], input[type="search"], input[type="url"], input[type="tel"], textarea');
 
-// Highlight them with a yellow border and add event listeners
-textInputs.forEach(input => {
-  input.style.border = '2px solid yellow';
-
-  // Add focus event listener
-  input.addEventListener('focus', () => {
-    input.style.border = '4px solid green';
-  });
-
-  // Add blur event listener
-  input.addEventListener('blur', () => {
+// Function to add event listeners
+function addEventListeners() {
+  textInputs.forEach(input => {
     input.style.border = '2px solid yellow';
+
+    // Add focus event listener
+    input.addEventListener('focus', handleFocus);
+
+    // Add blur event listener
+    input.addEventListener('blur', handleBlur);
+
+    // Add keypress event listener for Dvorak to Colemak conversion
+    input.addEventListener('keydown', dvorakToColemakConversion);
   });
 
-  // Add keypress event listener for Dvorak to Colemak conversion
-  input.addEventListener('keydown', dvorakToColemakConversion);
-});
+  // Highlight the currently focused element, if any
+  const focusedElement = document.activeElement;
+  if (Array.from(textInputs).includes(focusedElement)) {
+    focusedElement.style.border = '4px solid green';
+  }
+}
 
-// Listen for an event (optional)
-document.addEventListener('click', (event) => {
-  console.log('Clicked element:', event.target);
-});
+// Function to remove event listeners
+function removeEventListeners() {
+  textInputs.forEach(input => {
+    input.style.border = ''; // Reset border style
 
-// Listen for Command+T to turn off highlighting and Colemak conversion
+    // Remove event listeners
+    input.removeEventListener('focus', handleFocus);
+    input.removeEventListener('blur', handleBlur);
+    input.removeEventListener('keydown', dvorakToColemakConversion);
+  });
+}
+
+// Focus event handler
+function handleFocus(event) {
+  event.target.style.border = '4px solid green';
+}
+
+// Blur event handler
+function handleBlur(event) {
+  event.target.style.border = '2px solid yellow';
+}
+
+// Initial state
+let isActive = true;
+addEventListeners();
+
+// Listen for Command+' to toggle highlighting and Colemak conversion
 document.addEventListener('keydown', (event) => {
   if (event.metaKey && event.key === '\'') {
     event.preventDefault();
-    textInputs.forEach(input => {
-      input.style.border = ''; // Reset border style
-
-      // Remove event listeners
-      input.removeEventListener('focus', () => {
-        input.style.border = '4px solid green';
-      });
-
-      input.removeEventListener('blur', () => {
-        input.style.border = '2px solid yellow';
-      });
-
-      input.removeEventListener('keydown', dvorakToColemakConversion);
-    });
+    if (isActive) {
+      removeEventListeners();
+    } else {
+      addEventListeners();
+    }
+    isActive = !isActive;
   }
 });
