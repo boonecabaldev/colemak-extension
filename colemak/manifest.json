@@ -23,7 +23,7 @@
     }
   ],
   "browser_action": {
-    "default_popup": "popup.html",
+    "default_title": "Open Colemak Dialog",
     "default_icon": {
       "16": "icons8-copy-16.png"
     }
