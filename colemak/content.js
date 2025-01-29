@@ -1,3 +1,8 @@
+if (document.getElementById("colemakDialog")) {
+  console.log("Dialog already exists.");
+  return; // Prevent multiple injections
+}
+
 // Toggle state (true = enabled, false = disabled)
 let isActive = true;
 
