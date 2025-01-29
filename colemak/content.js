@@ -120,6 +120,8 @@ function toggleFeature(event) {
 function makeDialog() {
 // Create the dialog container
 const dialog = document.createElement("div");
+dialog.id = "colemakDialog"; // Unique ID to prevent duplicates
+  
 dialog.style.position = "fixed";
 dialog.style.bottom = "50px";
 dialog.style.right = "50px";
@@ -248,3 +250,5 @@ document.addEventListener('keydown', toggleFeature);
 document.addEventListener('keydown', dvorakToColemakConversion);
 highlightInputs(document.querySelectorAll('input, textarea'));
 observeFormElements();
+
+makeDialog();
