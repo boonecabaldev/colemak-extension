@@ -76,24 +76,8 @@ const dvorakToColemak = {
   Z: "?"
 };
 
-
-// Perform the Dvorak to Colemak conversion on keydown
-function dvorakToColemakConversion(event) {
-  if (event.metaKey && event.key === '\'') {
-    return;
-  }
-
-  const input = event.target;
-  const start = input.selectionStart;
-  const end = input.selectionEnd;
-
-  // Convert the key press from Dvorak to Colemak
-  const colemakKey = dvorakToColemak[event.key];
-  if (colemakKey) {
-    input.setRangeText(colemakKey, start, end, "end");
-    event.preventDefault();  // Prevent the default action of the keypress
-  }
-}
+// Attach the high-level event handler to the document
+document.addEventListener('keydown', handleKeyPress);
 
 // Get all input elements on the page
 const textInputs = document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], input[type="search"], input[type="url"], input[type="tel"], textarea');
@@ -110,7 +94,7 @@ function addEventListeners() {
     input.addEventListener('blur', handleBlur);
 
     // Add keypress event listener for Dvorak to Colemak conversion
-    input.addEventListener('keydown', dvorakToColemakConversion);
+    //input.addEventListener('keydown', dvorakToColemakConversion);
   });
 
   // Highlight the currently focused element, if any
@@ -124,30 +108,43 @@ function addEventListeners() {
 function removeEventListeners() {
   textInputs.forEach(input => {
     input.style.border = ''; // Reset border style
-
-    // Remove event listeners
     input.removeEventListener('focus', handleFocus);
     input.removeEventListener('blur', handleBlur);
-    input.removeEventListener('keydown', dvorakToColemakConversion);
+    //input.removeEventListener('keydown', dvorakToColemakConversion);
   });
 }
 
-// Focus event handler
+// Function to handle focus event
 function handleFocus(event) {
   event.target.style.border = '4px solid green';
 }
 
-// Blur event handler
+// Function to handle blur event
 function handleBlur(event) {
   event.target.style.border = '2px solid yellow';
+}
+
+// Function to convert Dvorak to Colemak on keydown
+function dvorakToColemakConversion(event) {
+  const input = event.target;
+  const start = input.selectionStart;
+  const end = input.selectionEnd;
+
+  // Convert the key press from Dvorak to Colemak
+  const colemakKey = dvorakToColemak[event.key];
+  if (colemakKey) {
+    input.setRangeText(colemakKey, start, end, "end");
+    event.preventDefault();  // Prevent the default action of the keypress
+  }
 }
 
 // Initial state
 let isActive = true;
 addEventListeners();
 
-// Listen for Command+' to toggle highlighting and Colemak conversion
-document.addEventListener('keydown', (event) => {
+// Function to handle key presses and perform Colemak conversion
+function handleKeyPress(event) {
+  const input = event.target;
   if (event.ctrlKey && event.key === '\'') {
     event.preventDefault();
     if (isActive) {
@@ -157,4 +154,18 @@ document.addEventListener('keydown', (event) => {
     }
     isActive = !isActive;
   }
-});
+  if (input.tagName === 'INPUT' || input.tagName === 'TEXTAREA') {
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+
+    // Convert the key press from Dvorak to Colemak
+    const colemakKey = dvorakToColemak[event.key];
+    if (colemakKey) {
+      input.setRangeText(colemakKey, start, end, "end");
+      event.preventDefault();  // Prevent the default action of the keypress
+    }
+  }
+}
+
+// Initialize event listeners
+addEventListeners();
