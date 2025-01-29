@@ -37,7 +37,10 @@ function highlightInputs(inputs) {
 
   // Ensure the focused input is green if toggled ON
   const focusedElement = document.activeElement;
-  if (isActive && focusedElement && (focusedElement.tagName === "INPUT" || focusedElement.tagName === "TEXTAREA")) {
+  if (isActive
+    && focusedElement
+    && (focusedElement.tagName === "INPUT" || focusedElement.tagName === "TEXTAREA")) {
+
     focusedElement.style.border = "4px solid green";
   }
 }
