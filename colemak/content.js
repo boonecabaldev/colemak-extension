@@ -79,7 +79,7 @@ const dvorakToColemak = {
 
 // Perform the Dvorak to Colemak conversion on keydown
 function dvorakToColemakConversion(event) {
-  if (event.metaKey && event.key === '\'') {
+  if (event.metaKey && event.key == '\'') {
     return;
   }
 
@@ -148,7 +148,7 @@ addEventListeners();
 
 // Listen for Command+' to toggle highlighting and Colemak conversion
 document.addEventListener('keydown', (event) => {
-  if (event.metaKey && event.key === '\'') {
+  if (event.metaKey && event.key == '\'') {
     event.preventDefault();
     if (isActive) {
       removeEventListeners();
