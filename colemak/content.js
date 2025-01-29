@@ -1,171 +1,119 @@
-// Dvorak to Colemak Conversion
+// Toggle state (true = enabled, false = disabled)
+let isActive = true;
+
+// Dvorak to Colemak Conversion (User-Verified Map)
 const dvorakToColemak = {
-  "'": "q",
-  ",": "w",
-  ".": "f",
-  p: "p",
-  y: "g",
-  f: "j",
-  g: "l",
-  c: "u",
-  r: "y",
-  l: ";",
-  a: "a",
-  o: "r",
-  e: "s",
-  u: "t",
-  i: "d",
-  d: "h",
-  h: "n",
-  t: "e",
-  n: "i",
-  ";": "z",
-  q: "x",
-  j: "c",
-  k: "v",
-  x: "b",
-  b: "k",
-  m: "m",
-  //v: ".",
-  //z: "/",
-  '"': "Q",
-  "<": "W",
-  ">": "F",
-  P: "P",
-  Y: "G",
-  F: "J",
-  G: "L",
-  C: "U",
-  R: "Y",
-  L: ":",
-  A: "A",
-  O: "R",
-  E: "S",
-  U: "T",
-  I: "D",
-  D: "H",
-  H: "N",
-  T: "E",
-  N: "I",
-  ":": "Z",
-  Q: "X",
-  J: "C",
-  K: "V",
-  X: "B",
-  B: "K",
-  M: "M",
-  //V: ">",
-  //Z: "?",
-  s: "o",
-  S: "O",
-  "-": "'",
-  _: '"',
-  "/": "[",
-  "?": "{",
-  "=": "]",
-  "+": "}",
-  "[": "-",
-  "{": "_",
-  "]": "=",
-  "}": "+",
-  w: ",",
-  W: "<",
-  v: ".",
-  V: ">",
-  z: "/",
-  Z: "?"
+  "'": "q", ",": "w", ".": "f", "p": "p", "y": "g",
+  "f": "j", "g": "l", "c": "u", "r": "y", "l": ";",
+  "a": "a", "o": "r", "e": "s", "u": "t", "i": "d",
+  "d": "h", "h": "n", "t": "e", "n": "i", ";": "z",
+  "q": "x", "j": "c", "k": "v", "x": "b", "b": "k",
+  "m": "m", '"': "Q", "<": "W", ">": "F", "P": "P",
+  "Y": "G", "F": "J", "G": "L", "C": "U", "R": "Y",
+  "L": ":", "A": "A", "O": "R", "E": "S", "U": "T",
+  "I": "D", "D": "H", "H": "N", "T": "E", "N": "I",
+  ":": "Z", "Q": "X", "J": "C", "K": "V", "X": "B",
+  "B": "K", "M": "M", "s": "o", "S": "O", "-": "'",
+  "_": '"', "/": "[", "?": "{", "=": "]", "+": "}",
+  "[": "-", "{": "_", "]": "=", "}": "+", "w": ",",
+  "W": "<", "v": ".", "V": ">", "z": "/", "Z": "?"
 };
 
-// Attach the high-level event handler to the document
-document.addEventListener('keydown', handleKeyPress);
-
-// Get all input elements on the page
-const textInputs = document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], input[type="search"], input[type="url"], input[type="tel"], textarea');
-
-// Function to add event listeners
-function addEventListeners() {
-  textInputs.forEach(input => {
-    input.style.border = '2px solid yellow';
-
-    // Add focus event listener
-    input.addEventListener('focus', handleFocus);
-
-    // Add blur event listener
-    input.addEventListener('blur', handleBlur);
-
-    // Add keypress event listener for Dvorak to Colemak conversion
-    //input.addEventListener('keydown', dvorakToColemakConversion);
-  });
-
-  // Highlight the currently focused element, if any
-  const focusedElement = document.activeElement;
-  if (Array.from(textInputs).includes(focusedElement)) {
-    focusedElement.style.border = '4px solid green';
-  }
-}
-
-// Function to remove event listeners
-function removeEventListeners() {
-  textInputs.forEach(input => {
-    input.style.border = ''; // Reset border style
-    input.removeEventListener('focus', handleFocus);
-    input.removeEventListener('blur', handleBlur);
-    //input.removeEventListener('keydown', dvorakToColemakConversion);
-  });
-}
-
-// Function to handle focus event
-function handleFocus(event) {
-  event.target.style.border = '4px solid green';
-}
-
-// Function to handle blur event
-function handleBlur(event) {
-  event.target.style.border = '2px solid yellow';
-}
-
-// Function to convert Dvorak to Colemak on keydown
-function dvorakToColemakConversion(event) {
-  const input = event.target;
-  const start = input.selectionStart;
-  const end = input.selectionEnd;
-
-  // Convert the key press from Dvorak to Colemak
-  const colemakKey = dvorakToColemak[event.key];
-  if (colemakKey) {
-    input.setRangeText(colemakKey, start, end, "end");
-    event.preventDefault();  // Prevent the default action of the keypress
-  }
-}
-
-// Initial state
-let isActive = true;
-addEventListeners();
-
-// Function to handle key presses and perform Colemak conversion
-function handleKeyPress(event) {
-  const input = event.target;
-  if (event.ctrlKey && event.key === '\'') {
-    event.preventDefault();
-    if (isActive) {
-      removeEventListeners();
-    } else {
-      addEventListeners();
+// Highlight form fields
+function highlightInputs(inputs) {
+  inputs.forEach(input => {
+    input.style.border = isActive ? '2px solid yellow' : ''; // Show/Hide highlights
+    if (!input.dataset.highlighted) {
+      input.addEventListener('focus', handleFocus);
+      input.addEventListener('blur', handleBlur);
+      input.dataset.highlighted = "true";
     }
-    isActive = !isActive;
+  });
+
+  // Ensure the focused input is green if toggled ON
+  const focusedElement = document.activeElement;
+  if (isActive && focusedElement && (focusedElement.tagName === "INPUT" || focusedElement.tagName === "TEXTAREA")) {
+    focusedElement.style.border = "4px solid green";
   }
-  if (input.tagName === 'INPUT' || input.tagName === 'TEXTAREA') {
+}
+
+// Observe dynamic form elements
+function observeFormElements() {
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      mutation.addedNodes.forEach(node => {
+        if (node.nodeType === 1) {
+          if (node.matches('input, textarea')) {
+            highlightInputs([node]);
+          } else {
+            highlightInputs(node.querySelectorAll('input, textarea'));
+          }
+        }
+      });
+    });
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+
+// Handle focus (Green border)
+function handleFocus(event) {
+  if (isActive) {
+    event.target.style.border = '4px solid green';
+  }
+}
+
+// Handle blur (Yellow border)
+function handleBlur(event) {
+  if (isActive) {
+    event.target.style.border = '2px solid yellow';
+  }
+}
+
+// Convert Dvorak to Colemak in all text fields, including email inputs
+function dvorakToColemakConversion(event) {
+  if (!isActive || event.ctrlKey || event.altKey || event.metaKey) return; // Skip if disabled or modifier keys are used
+
+  const colemakKey = dvorakToColemak[event.key];
+  if (!colemakKey) return;
+
+  event.preventDefault(); // Stop the original key from appearing
+
+  const input = event.target;
+
+  if (input.isContentEditable || input.tagName === "TEXTAREA") {
+    // Handle normal text fields
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    input.setRangeText(colemakKey, start, end, "end");
+  } else if (input.tagName === "INPUT") {
+    // Special handling for email inputs
     const start = input.selectionStart;
     const end = input.selectionEnd;
 
-    // Convert the key press from Dvorak to Colemak
-    const colemakKey = dvorakToColemak[event.key];
-    if (colemakKey) {
-      input.setRangeText(colemakKey, start, end, "end");
-      event.preventDefault();  // Prevent the default action of the keypress
-    }
+    const newValue = input.value.slice(0, start) + colemakKey + input.value.slice(end);
+    input.value = newValue;
+    input.setSelectionRange(start + 1, start + 1); // Move cursor forward
+  } else {
+    // Manually insert key into the DOM for non-input fields
+    document.execCommand("insertText", false, colemakKey);
   }
 }
 
-// Initialize event listeners
-addEventListeners();
+// Toggle feature with Ctrl + '
+function toggleFeature(event) {
+  if (event.ctrlKey && event.key === "'") {
+    event.preventDefault(); // Prevent unwanted input
+    isActive = !isActive; // Toggle state
+
+    // Apply new state to all form elements
+    highlightInputs(document.querySelectorAll('input, textarea'));
+
+    console.log(`Dvorak-to-Colemak & Highlighting: ${isActive ? "ON" : "OFF"}`);
+  }
+}
+
+// Attach event listeners
+document.addEventListener('keydown', toggleFeature);
+document.addEventListener('keydown', dvorakToColemakConversion);
+highlightInputs(document.querySelectorAll('input, textarea'));
+observeFormElements();
