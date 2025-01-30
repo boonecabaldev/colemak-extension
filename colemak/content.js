@@ -1,8 +1,51 @@
-(function() {
+(function () {
   if (document.getElementById("colemakDialog")) {
     console.log("Dialog already exists.");
     return; // Prevent multiple injections
   }
+
+  // Function to create and show the dialog
+  function showDialog(position) {
+    if (document.getElementById("colemakDialog")) {
+      console.log("Dialog already exists.");
+      return; // Prevent multiple injections
+    }
+
+    // Create dialog
+    const dialog = document.createElement('div');
+    dialog.id = 'colemakDialog';
+    dialog.style.position = 'fixed';
+    dialog.style.top = `${position.top}px`;
+    dialog.style.left = `${position.left}px`;
+    dialog.style.backgroundColor = 'white';
+    dialog.style.padding = '20px';
+    dialog.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+    dialog.style.zIndex = '1000';
+
+    // Add content to the dialog
+    dialog.innerHTML = `
+      <h1>Colemak Text Area</h1>
+      <textarea id="colemakTextArea" style="width: 100%; height: 200px;"></textarea>
+      <div style="margin-top: 10px;">
+        <button id="closeDialogButton">Close</button>
+      </div>
+    `;
+
+    // Append dialog to the body
+    document.body.appendChild(dialog);
+
+    // Add event listener to close button
+    document.getElementById('closeDialogButton').addEventListener('click', () => {
+      document.body.removeChild(dialog);
+    });
+  }
+
+  // Listen for messages from the background script
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "showDialog") {
+      showDialog(request.position);
+    }
+  });
 
   // Toggle state (true = enabled, false = disabled)
   let isActive = true;

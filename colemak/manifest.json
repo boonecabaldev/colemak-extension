@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Colemak Extension",
   "version": "1.0",
   "description": "A Chrome extension to convert Dvorak to Colemak.",
@@ -7,10 +7,7 @@
     "activeTab"
   ],
   "background": {
-    "scripts": [
-      "background.js"
-    ],
-    "persistent": false
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
@@ -22,14 +19,14 @@
       ]
     }
   ],
-  "browser_action": {
+  "action": {
     "default_title": "Open Colemak Dialog",
     "default_icon": {
       "16": "icons8-copy-16.png"
     }
   },
   "commands": {
-    "_execute_browser_action": {
+    "_execute_action": {
       "suggested_key": {
         "default": "Alt+H",
         "mac": "Command+H"
